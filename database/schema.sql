@@ -29,3 +29,38 @@ CREATE TABLE Chamados (
     FOREIGN KEY (id_colaborador) REFERENCES Usuarios(id_usuario),
     FOREIGN KEY (id_tecnico) REFERENCES Usuarios(id_usuario)
 );
+
+-- ==========================================
+-- 2. INSERÇÃO DE DADOS (DML - INSERT)
+-- ==========================================
+INSERT INTO Departamentos (nome_departamento) VALUES ('Recursos Humanos'), ('Financeiro'), ('TI');
+
+INSERT INTO Usuarios (nome, email, papel, id_departamento) VALUES 
+('Ana Souza', 'ana.rh@empresa.com', 'Colaborador', 1),
+('Carlos Mendes', 'carlos.fin@empresa.com', 'Colaborador', 2),
+('Administrador TI', 'admin.ti@nexgen.com', 'Tecnico', 3);
+
+INSERT INTO Chamados (titulo, descricao, urgencia, id_colaborador) VALUES 
+('Impressora não puxa papel', 'A impressora do RH está atolando papel constantemente.', 'Média', 1),
+('Sistema ERP fora do ar', 'Não consigo acessar o módulo de notas fiscais.', 'Alta', 2);
+
+-- ==========================================
+-- 3. ATUALIZAÇÃO E REMOÇÃO DE DADOS (DML - UPDATE/DELETE)
+-- ==========================================
+UPDATE Chamados SET status = 'Em Andamento', id_tecnico = 3 WHERE id_chamado = 2;
+DELETE FROM Chamados WHERE titulo = 'Teste';
+
+-- ==========================================
+-- 4. CONSULTA DE DADOS (DML - SELECT)
+-- ==========================================
+SELECT 
+    c.id_chamado AS Ticket,
+    c.titulo AS Problema,
+    c.urgencia AS Prioridade,
+    c.status AS Status,
+    u.nome AS Solicitante,
+    d.nome_departamento AS Setor
+FROM Chamados c
+INNER JOIN Usuarios u ON c.id_colaborador = u.id_usuario
+INNER JOIN Departamentos d ON u.id_departamento = d.id_departamento
+ORDER BY c.data_abertura DESC;
